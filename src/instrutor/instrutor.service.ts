@@ -1,4 +1,4 @@
-import { Instrutor } from "../shared/model/instrutor";
+import { Instrutor } from "../shared/model/instrutor.model";
 import { InstrutorRepository } from "./instrutor.repository";
 
 export class InstrutorService {
@@ -8,27 +8,18 @@ export class InstrutorService {
     this.repository = repository;
   }
 
-  async createInstrutor(instrutor: Instrutor): Promise<Instrutor> {
-    return await this.repository.create(instrutor);
-  }
-
   async getAll(): Promise<Instrutor[]> {
-    return await this.repository.getAll();
+    return this.repository.getAll();
   }
 
-  async getById(id: number): Promise<Instrutor | undefined> {
+  async create(instrutor: Instrutor): Promise<Instrutor | void> {
+    if (!instrutor.cpf) {
+      throw new Error("CPF Inválido");
+    }
+    return await this.repository.create(instrutor)
+  }
+
+  async getById(id: number): Promise<Instrutor | null> {
     return await this.repository.getById(id);
-  }
-
-  async updatePartOfInstrutor(id: number, instrutor: Instrutor): Promise<void> {
-    await this.repository.updatePartOfInstrutor(id, instrutor);
-  }
-
-  async updateInstrutor(id: number, instrutor: Instrutor): Promise<void> {
-    await this.repository.updateInstrutor(id, instrutor);
-  }
-
-  async deleteInstrutor(id: number): Promise<void> {
-    await this.repository.delete(id);
   }
 }
